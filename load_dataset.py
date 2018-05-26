@@ -1,5 +1,3 @@
-
-
 def load_dataset_fn(mode, file_name = 'notMNIST.pickle'):
     """mode = test for test data, 
     valid for validation data,
