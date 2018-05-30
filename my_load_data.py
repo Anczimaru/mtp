@@ -1,24 +1,10 @@
-
-# coding: utf-8
-
-# In[35]:
-
-
 import sys
 import os
 import numpy as np
 from six.moves import cPickle as pickle
 
-
-# In[36]:
-
-
 def load_dataset_fn(mode, src_dir="./data"):
-    """Imports data from src_dir from mode.pickle file
-    mode = test for test data,
-    test for test data,
-    train for training data,
-    src_dir = "./data" """
+    """mode = "train" or "test", returns dataset, labels for given mode """
     if mode == 'train' or mode == 'test' :
         file_name = "Dataset.pickle"
         pickle_file = os.path.join(src_dir,file_name)
