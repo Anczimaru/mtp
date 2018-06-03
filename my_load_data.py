@@ -4,6 +4,10 @@ import numpy as np
 from six.moves import cPickle as pickle
 
 def load_dataset_fn(nth, src_dir="./data"):
+    """
+    Handles importing data from file to memory, also randomizes it and its labels
+    """
+    
     nth=str(int(nth))
     src_dir = os.path.join(src_dir,"Dataset")
     name = "Part"+nth
