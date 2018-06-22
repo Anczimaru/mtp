@@ -1,7 +1,7 @@
 import sys
 import os
 import numpy as np
-from six.moves import cPickle as pickle
+import tensorflow as tf
 
 def load_dataset_fn(nth, src_dir="./data"):
     """
@@ -10,23 +10,22 @@ def load_dataset_fn(nth, src_dir="./data"):
     
     nth=str(int(nth))
     src_dir = os.path.join(src_dir,"Dataset")
-    name = "Part"+nth
-    label_name = name+".npy"
-    dataset_name = name+".pickle"
-    pickle_file = os.path.join(src_dir,dataset_name)
+    dataset_name = "data"+nth+".npy"
+    label_name = "label"+nth+".npy"
+    dataset_file = os.path.join(src_dir,dataset_name)
     label_name = os.path.join(src_dir,label_name)
-    try:
-        with open(pickle_file, 'rb') as f:
-            dataset = pickle.load(f)
-            labels = np.load(label_name)
-        dataset,labels = randomize(dataset,labels)
-        return dataset, labels
-    except Exception as e:
-        print('Unable to save data to', pickle_file, ':', e)
-        raise
-
-def randomize(dataset, labels):
-    permutation = np.random.permutation(labels.shape[0])
-    shuffled_dataset = dataset[permutation,:,:]
-    shuffled_labels = labels[permutation]
-    return shuffled_dataset, shuffled_labels
+    dataset = np.load(dataset_file)
+    labels = np.load(label_name)
+    labels_cl = labels[:,[0,1]]
+    labels_loc = labels[:,[2,3,4,5]]
+    del labels
+    dataset,labels_cl, labels_loc = randomize(dataset,labels_cl,labels_loc)
+    return dataset, labels_cl, labels_loc
+   
+def randomize(dataset, labels_cl, labels_loc):
+    permutation = np.random.permutation(labels_cl.shape[0])
+    shuffled_dataset = tf.convert_to_tensor(dataset[permutation])
+    shuffled_labels_cl = tf.convert_to_tensor(labels_cl[permutation])
+    shuffled_labels_loc = tf.convert_to_tensor(labels_loc[permutation])
+    
+    return shuffled_dataset, shuffled_labels_cl, shuffled_labels_loc
