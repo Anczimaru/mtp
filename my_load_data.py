@@ -16,8 +16,9 @@ def load_dataset_fn(nth, src_dir="./data"):
     label_name = os.path.join(src_dir,label_name)
     dataset = np.load(dataset_file)
     labels = np.load(label_name)
-    labels_cl = labels[:,[0,1]]
-    labels_loc = labels[:,[2,3,4,5]]
+    dataset = dataset.astype(np.float32)
+    labels_cl = labels[:,[0,1]].astype(np.float32)
+    labels_loc = labels[:,[2,3,4,5]].astype(np.float32)
     del labels
     dataset,labels_cl, labels_loc = randomize(dataset,labels_cl,labels_loc)
     return dataset, labels_cl, labels_loc
